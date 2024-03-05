@@ -1,7 +1,7 @@
 class GameController {
-  spawnShip() {
-    let shipPos = new createVector(width / 2, height / 2);
-    let ship = new Ship(100, shipPos);
-    ship.draw();
+  createShip() {
+    let shipStartPos = createVector(100, 100);
+    let ship = new Ship(100, shipStartPos);
+    return ship;
   }
 }

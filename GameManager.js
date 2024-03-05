@@ -1,7 +1,22 @@
-class GameManager {
-  gameController = new GameController();
+let ship;
+let controller;
 
-  spawnObjects() {
-    this.gameController.spawnShip();
+class GameManager {
+  createGameObjects() {
+    controller = new GameController();
+    ship = controller.createShip();
+  }
+
+  drawGame() {
+    ship.draw();
+    this.checkInputs();
+  }
+
+  checkInputs() {
+    if (keyIsDown(39)) {
+      ship.rotateShip(1);
+    } else if (keyIsDown(37)) {
+      ship.rotateShip(-1);
+    }
   }
 }
