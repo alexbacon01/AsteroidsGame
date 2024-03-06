@@ -35,6 +35,7 @@ class Ship {
     pop();
 
     this.hyperSpaceTimer = this.coolDownTimer(this.hyperSpaceTimer);
+    this.wrap();
   }
 
   rotateShip(step) {
@@ -62,5 +63,18 @@ class Ship {
     return currentTime;
   }
 
+  wrap(){
+    if(this.position.x- this.size/2> width){
+      this.position.x = 0;
+    } else if(this.position.x +this.size/2< 0){
+      this.position.x = width;
+    }
 
-}
+    if(this.position.y-this.size/2 > height){
+      this.position.y = 0;
+    } else if(this.position.y + this.size/2 < 0){
+      this.position.y = height;
+    }
+    }
+  }
+
