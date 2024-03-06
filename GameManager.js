@@ -2,9 +2,9 @@ let ship;
 let controller;
 
 class GameManager {
-  createGameObjects() {
+  createGameObjects(shipImage) {
     controller = new GameController();
-    ship = controller.createShip();
+    ship = controller.createShip(shipImage);
   }
 
   drawGame() {

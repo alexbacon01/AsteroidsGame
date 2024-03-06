@@ -1,6 +1,6 @@
 
 class Ship {
-  constructor(size, position, mass) {
+  constructor(image,size, position, mass) {
     this.image = image;
     this.size = size;
     this.position = position;
@@ -8,20 +8,23 @@ class Ship {
     this.velocity = createVector(0,0);
     this.acceleration = createVector(0,0);
     this.multiplier = 0.1;
-    this.angle = 0;
+    this.angle = 90;
     this.maxSpeed = 5;
+    this.image = image;
   }
 
   draw() {
     fill(0);   
     push();
-    rectMode(CENTER);
+    //rectMode(CENTER);
     angleMode(DEGREES);
     this.position.add(this.velocity);
     this.velocity.mult(0.99);
     translate(this.position.x, this.position.y);
     rotate(this.angle);
-    rect(0, 0, 50, 100);
+    imageMode(CENTER);
+    image(this.image, 0, 0);
+    //rect(0, 0, 50, 100);
 
     pop();
   }
