@@ -30,12 +30,11 @@ class Ship {
     translate(this.position.x, this.position.y);
     rotate(this.angle);
     imageMode(CENTER);
-    image(this.image, 0, 0);
+    image(this.image,0,0);
     this.image.resize(this.size, this.size);
     pop();
 
     this.hyperSpaceTimer = this.coolDownTimer(this.hyperSpaceTimer);
-    print("hyperSpaceTimer");
   }
 
   rotateShip(step) {

@@ -7,4 +7,13 @@ class GameController {
     let ship = new Ship(image,64, shipStartPos,shipMass);
     return ship;
   }
+
+  createAsteroid(image, size){
+    let x = random(0 + size/2, width-size/2);
+    let y = random(0 + size/2, height-size/2);
+
+    let startPos = createVector(x, y);
+    let asteroid = new Asteroid(image, startPos, size);
+    return asteroid;
+  }
 }
