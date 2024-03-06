@@ -1,7 +1,6 @@
 
 class GameController {
 
-
   createShip(image) {
     let shipStartPos = createVector(100, 100);
     let shipMass = createVector(5,5);

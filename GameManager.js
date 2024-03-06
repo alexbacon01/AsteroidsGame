@@ -8,15 +8,15 @@ class GameManager {
   }
 
   drawGame() {
-    ship.draw();
     this.checkInputs();
+    ship.draw();
   }
 
   checkInputs() {
     if (keyIsDown(39)) {
-      ship.rotateShip(4);
+      ship.rotateShip(2);
     } else if (keyIsDown(37)) {
-      ship.rotateShip(-4);
+      ship.rotateShip(-2);
     }
 
     if(keyIsDown(32)){

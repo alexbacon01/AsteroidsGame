@@ -2,7 +2,8 @@ let gameManager;
 let shipImg;
 
 function preload(){
-  shipImg = loadImage('images/xwing.png'); 
+  shipImg = loadImage('images/xwingImage.png'); 
+
 }
 
 function setup() {
