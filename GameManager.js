@@ -17,9 +17,11 @@ class GameManager {
   drawGame() {
     this.checkInputs();
     ship.draw();
+    ship.wrap();
     for(let i = 0; i<asteroids.length; i++){
       asteroids[i].draw();
       asteroids[i].move();
+      asteroids[i].wrap();
     }
     
 
@@ -41,5 +43,17 @@ class GameManager {
     } 
   }
 
+  wrap(){
+    if(this.position.x- this.size/2> width){
+      this.position.x = 0;
+    } else if(this.position.x +this.size/2< 0){
+      this.position.x = width;
+    }
 
+    if(this.position.y-this.size/2 > height){
+      this.position.y = 0;
+    } else if(this.position.y + this.size/2 < 0){
+      this.position.y = height;
+    }
+    }
 }
