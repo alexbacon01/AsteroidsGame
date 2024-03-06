@@ -13,6 +13,8 @@ class Ship {
     this.image = image;
     this.direction = 0;
     this.directionVector = p5.Vector.fromAngle(radians(this.direction));
+    this.hyperSpaceCooldown = 500;
+    this.hyperSpaceTimer = 600;
   }
 
   draw() {
@@ -29,7 +31,11 @@ class Ship {
     rotate(this.angle);
     imageMode(CENTER);
     image(this.image, 0, 0);
+    this.image.resize(this.size, this.size);
     pop();
+
+    this.hyperSpaceTimer = this.coolDownTimer(this.hyperSpaceTimer);
+    print("hyperSpaceTimer");
   }
 
   rotateShip(step) {
@@ -38,9 +44,23 @@ class Ship {
 
   fireEngine(){
  let force = p5.Vector.fromAngle(radians(this.direction)).setMag(0.2);
- print(force);
  this.velocity.add(force);
  this.velocity.limit(this.maxSpeed);
+  }
+
+  hyperSpace(){
+    if(this.hyperSpaceTimer>this.hyperSpaceCooldown){
+      let newX = random(0 + this.size/2, width-this.size/2);
+      let newY = random(0 + this.size/2, height-this.size/2);
+  
+      this.position = createVector(newX, newY);
+      this.hyperSpaceTimer = 0;
+    }
+  }
+
+  coolDownTimer(currentTime){
+    currentTime++;
+    return currentTime;
   }
 
 

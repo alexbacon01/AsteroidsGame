@@ -19,8 +19,12 @@ class GameManager {
       ship.rotateShip(-2);
     }
 
-    if(keyIsDown(32)){
+    if(keyIsDown(32)){ //space bar
       ship.fireEngine();
     }
+
+    if(keyIsDown(70)){//F key
+      ship.hyperSpace();
+    } 
   }
 }
