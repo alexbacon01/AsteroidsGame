@@ -26,14 +26,16 @@ class GameManager {
     if (gameRunning) {
       controller.checkInputs();
       ship.draw();
-
       for (let i = 0; i < ship.numBullets; i++) {
-        ship.bullets[i].draw();
-        ship.bullets[i].shoot();
-        print(ship.bullets[i].position);
+        if (ship.bullets[i] != null && ship.bullets[i].alive) {
+          ship.bullets[i].draw();
+          ship.bullets[i].shoot();
+          controller.wrap(ship.bullets[i]);
+        }
       }
 
       controller.wrap(ship);
+
       for (let i = 0; i < asteroids.length; i++) {
         asteroids[i].draw();
         asteroids[i].move();

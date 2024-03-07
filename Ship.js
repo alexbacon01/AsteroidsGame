@@ -1,4 +1,3 @@
-let numBullets = 0;
 class Ship {
   constructor(image, size, position, mass) {
     this.image = image;
@@ -15,7 +14,10 @@ class Ship {
     this.directionVector = p5.Vector.fromAngle(radians(this.direction));
     this.hyperSpaceCooldown = 100;
     this.hyperSpaceTimer = 100;
+    this.bulletTimer = 20;
+    this.bulletCooldown = 20;
     this.bullets = [];
+    this.numBullets = 0;
   }
 
   draw() {
@@ -34,8 +36,8 @@ class Ship {
     image(this.image, 0, 0);
     this.image.resize(this.size, this.size);
     pop();
-
     this.hyperSpaceTimer = this.coolDownTimer(this.hyperSpaceTimer);
+    this.bulletTimer = this.coolDownTimer(this.bulletTimer);
   }
 
   rotateShip(step) {
@@ -64,7 +66,20 @@ class Ship {
   }
 
   shootBullet() {
-    this.bullets[numBullets] = new Bullet(this.position.copy(), 10, "#2cfc03");
-    numBullets++;
+    if (this.bulletTimer > this.bulletCooldown) {
+      this.bullets[this.numBullets] = new Bullet(
+        createVector(
+          this.position.x - this.size / 2.4,
+          this.position.y - this.size / 20
+        ),
+        5,
+        "#2cfc03",
+        this.directionVector.copy(),
+        this.angle,
+        this.velocity.copy()
+      );
+      this.numBullets++;
+      this.bulletTimer = 0;
+    }
   }
 }
