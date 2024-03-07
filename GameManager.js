@@ -1,13 +1,16 @@
 let ship;
 let controller;
+let soundManager;
 const NUM_ASTEROIDS = 6;
 let asteroids = [];
 
 class GameManager {
-  createGameObjects(shipImage, asteroidImage) {
+  createGameObjects(shipImage, asteroidImage, bgMusic) {
     let asteroid;
     controller = new GameController();
     ship = controller.createShip(shipImage);
+    soundManager = new SoundManager(bgMusic);
+    soundManager.backgroundMusic();
     for(let i = 0; i<NUM_ASTEROIDS; i++){
       asteroid = controller.createAsteroid(asteroidImage, 64);
       asteroids[i] = asteroid;
@@ -17,11 +20,11 @@ class GameManager {
   drawGame() {
     this.checkInputs();
     ship.draw();
-    ship.wrap();
+    this.wrap(ship);
     for(let i = 0; i<asteroids.length; i++){
       asteroids[i].draw();
       asteroids[i].move();
-      asteroids[i].wrap();
+      this.wrap(asteroids[i]);
     }
     
 
@@ -43,17 +46,17 @@ class GameManager {
     } 
   }
 
-  wrap(){
-    if(this.position.x- this.size/2> width){
-      this.position.x = 0;
-    } else if(this.position.x +this.size/2< 0){
-      this.position.x = width;
+  wrap(Object){
+    if(Object.position.x- Object.size/2> width){
+      Object.position.x = 0;
+    } else if(Object.position.x +Object.size/2< 0){
+      Object.position.x = width;
     }
 
-    if(this.position.y-this.size/2 > height){
-      this.position.y = 0;
-    } else if(this.position.y + this.size/2 < 0){
-      this.position.y = height;
+    if(Object.position.y-Object.size/2 > height){
+      Object.position.y = 0;
+    } else if(Object.position.y + Object.size/2 < 0){
+      Object.position.y = height;
     }
     }
 }
