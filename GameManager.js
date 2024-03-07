@@ -24,25 +24,31 @@ class GameManager {
 
   drawGame() {
     if (gameRunning) {
-      this.checkInputs();
+      controller.checkInputs();
       ship.draw();
-      this.wrap(ship);
+
+      for (let i = 0; i < ship.numBullets; i++) {
+        ship.bullets[i].draw();
+        ship.bullets[i].shoot();
+        print(ship.bullets[i].position);
+      }
+
+      controller.wrap(ship);
       for (let i = 0; i < asteroids.length; i++) {
         asteroids[i].draw();
         asteroids[i].move();
-        if (this.checkCollisions(asteroids[i], ship)) {
+        if (controller.checkCollisions(asteroids[i], ship)) {
           //check for ship and asteroid collisions
           if (lives > 0) {
-            this.respawnShip();
+            controller.respawnShip();
           }
         }
-        this.wrap(asteroids[i]);
+        controller.wrap(asteroids[i]);
       }
       hud.drawScore(score);
       hud.drawLives(lives);
     } else {
       hud.endScreen();
-      print("End");
     }
 
     if (lives > 0) {
@@ -52,59 +58,7 @@ class GameManager {
     }
   }
 
-  checkInputs() {
-    if (keyIsDown(39)) {
-      ship.rotateShip(2);
-    } else if (keyIsDown(37)) {
-      ship.rotateShip(-2);
-    }
-
-    if (keyIsDown(38)) {
-      //space bar
-      ship.fireEngine();
-    }
-
-    if (keyIsDown(70)) {
-      //F key
-      ship.hyperSpace();
-    }
-  }
-
-  wrap(Object) {
-    if (Object.position.x - Object.size / 2 > width) {
-      Object.position.x = 0;
-    } else if (Object.position.x + Object.size / 2 < 0) {
-      Object.position.x = width;
-    }
-
-    if (Object.position.y - Object.size / 2 > height) {
-      Object.position.y = 0;
-    } else if (Object.position.y + Object.size / 2 < 0) {
-      Object.position.y = height;
-    }
-  }
-
   changeScore(change) {
     score += change;
-  }
-
-  checkCollisions(object1, object2) {
-    let size1 = object1.size / 2;
-    let size2 = object2.size / 2;
-    if (
-      object1.position.x + size1 >= object2.position.x - size2 &&
-      object1.position.x - size1 <= object2.position.x + size2 &&
-      object1.position.y + size1 >= object2.position.y &&
-      object1.position.y - size1 <= object2.position.y
-    ) {
-      print(object1.position.y + size1 + " " + object2.position.y);
-      return true;
-    }
-  }
-
-  respawnShip() {
-    ship.position = createVector(width / 2, height / 2);
-    ship.velocity = createVector(0, 0);
-    lives--;
   }
 }

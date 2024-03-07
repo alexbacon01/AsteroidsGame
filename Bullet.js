@@ -1,10 +1,17 @@
 class Bullet {
-  constructor(startPos, velocity, speed, size, colour) {
-    this.bulletPos = startPos;
-    this.velocity = velocity;
-    this.speed = speed;
+  constructor(startPos, size, colour) {
+    this.pos = startPos;
     this.size = size;
     this.colour = colour;
-    this.maxSpeed = 5;
+  }
+
+  draw() {
+    fill(this.colour);
+    ellipse(this.pos.x, this.pos.y, this.size, this.size);
+  }
+
+  shoot(speed, angle) {
+    this.pos.x += speed * sin(angle);
+    this.pos.y += speed * cos(angle);
   }
 }
