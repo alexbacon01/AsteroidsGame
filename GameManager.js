@@ -6,7 +6,6 @@ const NUM_ASTEROIDS = 6;
 let asteroids = [];
 let hud;
 let lives = 3;
-let shipStart = createVector(width/2, height/2);
 
 class GameManager {
   createGameObjects(shipImage, asteroidImage, bgMusic, font) {
@@ -33,7 +32,7 @@ class GameManager {
       asteroids[i].move();
       if(this.checkCollisions(asteroids[i], ship)){ //check for ship and asteroid collisions
         if(lives > 0){
-      
+          this.respawnShip();
         }
       }
       this.wrap(asteroids[i]);
@@ -87,6 +86,8 @@ class GameManager {
   }
 
   respawnShip(){
-    ship.position = startPos
+    ship.position = createVector(width/2, height/2);
+    ship.velocity = createVector(0,0);
+    lives--;
   }
 }
