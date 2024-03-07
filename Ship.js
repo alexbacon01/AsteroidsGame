@@ -10,13 +10,13 @@ class Ship {
     this.velocity = createVector(0, 0);
     this.acceleration = createVector(0, 0);
     this.multiplier = 0.1;
-    this.angle = 0;
+    this.angle = -90;
     this.maxSpeed = 5;
     this.image = image;
     this.direction = 0;
     this.directionVector = p5.Vector.fromAngle(radians(this.direction));
-    this.hyperSpaceCooldown = 500;
-    this.hyperSpaceTimer = 600;
+    this.hyperSpaceCooldown = 100;
+    this.hyperSpaceTimer = 100;
   }
 
   draw() {
