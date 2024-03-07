@@ -6,6 +6,7 @@ const NUM_ASTEROIDS = 6;
 let asteroids = [];
 let hud;
 let lives = 3;
+let gameRunning = true; 
 
 class GameManager {
   createGameObjects(shipImage, asteroidImage, bgMusic, font) {
@@ -22,23 +23,32 @@ class GameManager {
   }
 
   drawGame() {
-    this.checkInputs();
-    ship.draw();
-    this.wrap(ship);
-    hud.drawScore(score);
-    hud.drawLives(lives);
-    for(let i = 0; i<asteroids.length; i++){
-      asteroids[i].draw();
-      asteroids[i].move();
-      if(this.checkCollisions(asteroids[i], ship)){ //check for ship and asteroid collisions
-        if(lives > 0){
-          this.respawnShip();
+    if(gameRunning){
+      this.checkInputs();
+      ship.draw();
+      this.wrap(ship);
+      hud.drawScore(score);
+      hud.drawLives(lives);
+      for(let i = 0; i<asteroids.length; i++){
+        asteroids[i].draw();
+        asteroids[i].move();
+        if(this.checkCollisions(asteroids[i], ship)){ //check for ship and asteroid collisions
+          if(lives > 0){
+            this.respawnShip();
+          }
         }
+        this.wrap(asteroids[i]);
       }
-      this.wrap(asteroids[i]);
+    } else {
+      hud.endScreen();
+      print("End");
     }
-    
 
+    if(lives>0){
+      gameRunning = true;
+    } else{
+      gameRunning = false;
+    }
   }
 
   checkInputs() {
