@@ -64,21 +64,40 @@ class Ship {
     return currentTime;
   }
 
-  shootBullet() {
+  shootBullet(side) {
+    //1 == left 2 ==right
     if (this.bulletTimer > this.bulletCooldown) {
-      this.bullets.push(
-        new Bullet(
-          createVector(
-            this.position.x - this.size / 2.4,
-            this.position.y - this.size / 20
-          ),
-          5,
-          "#2cfc03",
-          this.directionVector.copy(),
-          this.angle,
-          this.velocity.copy()
-        )
-      );
+      if (side == 1) {
+        this.bullets.push(
+          new Bullet(
+            createVector(
+              this.position.x - this.size / 2.4,
+              this.position.y - this.size / 20
+            ),
+            5,
+            "#2cfc03",
+            this.directionVector.copy(),
+            this.angle,
+            this.velocity.copy()
+          )
+        );
+        this.shootBullet(2);
+      } else if (side == 2) {
+        this.bullets.push(
+          new Bullet(
+            createVector(
+              this.position.x + this.size / 2.4,
+              this.position.y - this.size / 20
+            ),
+            5,
+            "#2cfc03",
+            this.directionVector.copy(),
+            this.angle,
+            this.velocity.copy()
+          )
+        );
+      }
+
       this.numBullets++;
       this.bulletTimer = 0;
     }

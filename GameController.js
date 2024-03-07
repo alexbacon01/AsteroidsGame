@@ -33,7 +33,7 @@ class GameController {
     }
 
     if (keyIsDown(32)) {
-      ship.shootBullet();
+      ship.shootBullet(1);
     }
   }
 
