@@ -25,4 +25,8 @@ class Asteroid {
     this.velocity.limit(this.speedLimit);
     this.position.add(this.velocity);
   }
+
+  break() {
+    print("break");
+  }
 }

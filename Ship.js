@@ -17,7 +17,6 @@ class Ship {
     this.bulletTimer = 20;
     this.bulletCooldown = 20;
     this.bullets = [];
-    this.numBullets = 0;
   }
 
   draw() {
@@ -67,16 +66,18 @@ class Ship {
 
   shootBullet() {
     if (this.bulletTimer > this.bulletCooldown) {
-      this.bullets[this.numBullets] = new Bullet(
-        createVector(
-          this.position.x - this.size / 2.4,
-          this.position.y - this.size / 20
-        ),
-        5,
-        "#2cfc03",
-        this.directionVector.copy(),
-        this.angle,
-        this.velocity.copy()
+      this.bullets.push(
+        new Bullet(
+          createVector(
+            this.position.x - this.size / 2.4,
+            this.position.y - this.size / 20
+          ),
+          5,
+          "#2cfc03",
+          this.directionVector.copy(),
+          this.angle,
+          this.velocity.copy()
+        )
       );
       this.numBullets++;
       this.bulletTimer = 0;

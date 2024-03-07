@@ -26,11 +26,13 @@ class GameManager {
     if (gameRunning) {
       controller.checkInputs();
       ship.draw();
-      for (let i = 0; i < ship.numBullets; i++) {
+      for (let i = 0; i < ship.bullets.length; i++) {
         if (ship.bullets[i] != null && ship.bullets[i].alive) {
           ship.bullets[i].draw();
           ship.bullets[i].shoot();
           controller.wrap(ship.bullets[i]);
+        } else {
+          ship.bullets.pop();
         }
       }
 
@@ -46,6 +48,14 @@ class GameManager {
           }
         }
         controller.wrap(asteroids[i]);
+        for (let j = 0; j < ship.bullets.length; j++) {
+          if (
+            controller.checkCollisions(ship.bullets[j], asteroids[i]) &&
+            ship.bullets[j] != null
+          ) {
+            asteroids[i].break();
+          }
+        }
       }
       hud.drawScore(score);
       hud.drawLives(lives);

@@ -8,7 +8,7 @@ class Bullet {
     this.angle = angle;
     this.direction = direction;
     this.bulletTimer = 0;
-    this.bulletLife = 300;
+    this.bulletLife = 200;
     this.alive = true;
   }
 
