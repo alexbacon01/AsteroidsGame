@@ -59,7 +59,7 @@ class GameManager {
       ship.rotateShip(-2);
     }
 
-    if (keyIsDown(32)) {
+    if (keyIsDown(38)) {
       //space bar
       ship.fireEngine();
     }
