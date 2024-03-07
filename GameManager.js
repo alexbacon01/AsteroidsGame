@@ -1,16 +1,20 @@
 let ship;
 let controller;
 let soundManager;
+let score = 0;
 const NUM_ASTEROIDS = 6;
 let asteroids = [];
+let hud;
+let lives = 3;
 
 class GameManager {
-  createGameObjects(shipImage, asteroidImage, bgMusic) {
+  createGameObjects(shipImage, asteroidImage, bgMusic, font) {
     let asteroid;
     controller = new GameController();
     ship = controller.createShip(shipImage);
     soundManager = new SoundManager(bgMusic);
     soundManager.backgroundMusic();
+    hud = new HUD(font);
     for(let i = 0; i<NUM_ASTEROIDS; i++){
       asteroid = controller.createAsteroid(asteroidImage, 64);
       asteroids[i] = asteroid;
@@ -21,6 +25,8 @@ class GameManager {
     this.checkInputs();
     ship.draw();
     this.wrap(ship);
+    hud.drawScore(score);
+    hud.drawLives(lives);
     for(let i = 0; i<asteroids.length; i++){
       asteroids[i].draw();
       asteroids[i].move();
@@ -59,4 +65,8 @@ class GameManager {
       Object.position.y = height;
     }
     }
+
+  changeScore(change){
+    score+= change;
+  }
 }
