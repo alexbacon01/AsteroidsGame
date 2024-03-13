@@ -58,8 +58,8 @@ class GameController {
       object1.position.x + size1 >= object2.position.x - size2 &&
       object1.position.x - size1 <= object2.position.x + size2 &&
       object1.position.y + size1 >= object2.position.y &&
-      object1.position.y - size1 <= object2.position.y && object1 !=null && object2 !=null
-    ) {
+      object1.position.y - size1 <= object2.position.y && object1 !=null &&
+    object2 !=null) {
       return true;
     }
   }
