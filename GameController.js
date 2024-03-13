@@ -11,7 +11,7 @@ class GameController {
     let y = random(0 + size / 2, height - size / 2);
 
     let startPos = createVector(x, y);
-    let asteroid = new Asteroid(image, startPos, size);
+    let asteroid = new Asteroid(image, startPos, size, createVector(0,0), createVector(random(-1, 1), random(-1, 1)), random(0, 360));
     return asteroid;
   }
 
@@ -58,7 +58,7 @@ class GameController {
       object1.position.x + size1 >= object2.position.x - size2 &&
       object1.position.x - size1 <= object2.position.x + size2 &&
       object1.position.y + size1 >= object2.position.y &&
-      object1.position.y - size1 <= object2.position.y
+      object1.position.y - size1 <= object2.position.y && object1 !=null && object2 !=null
     ) {
       return true;
     }

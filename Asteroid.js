@@ -1,10 +1,10 @@
 class Asteroid {
-  constructor(image, position, size) {
+  constructor(image, position, size, velocity, acceleration) {
     this.position = position;
     this.size = size;
     this.image = image;
-    this.velocity = createVector(0, 0);
-    this.acceleration = createVector(random(-1, 1), random(-1, 1));
+    this.velocity = velocity;
+    this.acceleration = acceleration;
     this.speedLimit = 0.5;
     this.rotation = random(0, 360);
   }
@@ -24,9 +24,5 @@ class Asteroid {
     this.velocity.add(this.acceleration);
     this.velocity.limit(this.speedLimit);
     this.position.add(this.velocity);
-  }
-
-  break() {
-    print("break");
   }
 }

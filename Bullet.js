@@ -7,8 +7,7 @@ class Bullet {
     this.speedLimit = 8;
     this.angle = angle;
     this.direction = direction;
-    this.bulletTimer = 0;
-    this.bulletLife = 200;
+    this.time = 0;
     this.alive = true;
   }
 
@@ -31,5 +30,13 @@ class Bullet {
     let force = this.direction.setMag(0.2);
     this.velocity.add(force);
     this.velocity.limit(this.speedLimit);
+  }
+
+  timer(){
+    this.time++
+  }
+
+  getTime(){
+    return this.time;
   }
 }

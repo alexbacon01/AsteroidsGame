@@ -71,8 +71,8 @@ class Ship {
         this.bullets.push(
           new Bullet(
             createVector(
-              this.position.x - this.size / 2.4,
-              this.position.y - this.size / 20
+              this.position.x,
+              this.position.y,
             ),
             5,
             "#2cfc03",
@@ -81,7 +81,8 @@ class Ship {
             this.velocity.copy()
           )
         );
-        this.shootBullet(2);
+        
+        /*this.shootBullet(2);
       } else if (side == 2) {
         this.bullets.push(
           new Bullet(
@@ -97,9 +98,10 @@ class Ship {
           )
         );
       }
-
+*/
       this.numBullets++;
       this.bulletTimer = 0;
     }
   }
+}
 }
