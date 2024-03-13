@@ -9,9 +9,11 @@ class Bullet {
     this.direction = direction;
     this.time = 0;
     this.alive = true;
+    this.collider = new Collider(this.position, this.size - 10);
   }
 
   draw() {
+    this.collider.draw();
     push();
     angleMode(DEGREES);
     fill(this.colour);
@@ -32,11 +34,11 @@ class Bullet {
     this.velocity.limit(this.speedLimit);
   }
 
-  timer(){
-    this.time++
+  timer() {
+    this.time++;
   }
 
-  getTime(){
+  getTime() {
     return this.time;
   }
 }

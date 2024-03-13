@@ -7,9 +7,11 @@ class Asteroid {
     this.acceleration = acceleration;
     this.speedLimit = 0.5;
     this.rotation = random(0, 360);
+    this.collider = new Collider(this.position, this.size - 10);
   }
 
   draw() {
+    this.collider.draw();
     push();
     angleMode(DEGREES);
     translate(this.position.x, this.position.y);

@@ -11,7 +11,14 @@ class GameController {
     let y = random(0 + size / 2, height - size / 2);
 
     let startPos = createVector(x, y);
-    let asteroid = new Asteroid(image, startPos, size, createVector(0,0), createVector(random(-1, 1), random(-1, 1)), random(0, 360));
+    let asteroid = new Asteroid(
+      image,
+      startPos,
+      size,
+      createVector(0, 0),
+      createVector(random(-1, 1), random(-1, 1)),
+      random(0, 360)
+    );
     return asteroid;
   }
 
@@ -52,14 +59,17 @@ class GameController {
   }
 
   checkCollisions(object1, object2) {
-    let size1 = object1.size / 2;
-    let size2 = object2.size / 2;
+    let size1 = object1.collider.size / 2;
+    let size2 = object2.collider.size / 2;
     if (
-      object1.position.x + size1 >= object2.position.x - size2 &&
-      object1.position.x - size1 <= object2.position.x + size2 &&
-      object1.position.y + size1 >= object2.position.y &&
-      object1.position.y - size1 <= object2.position.y && object1 !=null &&
-    object2 !=null) {
+      object1.collider.position.x + size1 >=
+        object2.collider.position.x - size2 &&
+      object1.collider.position.x - size1 <=
+        object2.collider.position.x + size2 &&
+      object1.collider.position.y + size1 >=
+        object2.collider.position.y - size2 &&
+      object1.collider.position.y - size1 <= object2.collider.position.y + size2
+    ) {
       return true;
     }
   }
@@ -68,6 +78,7 @@ class GameController {
     ship.position = createVector(width / 2, height / 2);
     ship.velocity = createVector(0, 0);
     ship.angle = -90;
+    ship.collider.position = ship.position;
     lives--;
   }
 }

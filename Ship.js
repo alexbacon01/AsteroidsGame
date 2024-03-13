@@ -17,10 +17,12 @@ class Ship {
     this.bulletTimer = 20;
     this.bulletCooldown = 20;
     this.bullets = [];
+    this.collider = new Collider(this.position, this.size - 10);
   }
 
   draw() {
     fill(0);
+    this.collider.draw();
     if (this.direction != this.angle) {
       this.direction = lerp(this.direction, this.angle, 0.1);
       this.directionVector = p5.Vector.fromAngle(radians(this.direction));
@@ -47,6 +49,7 @@ class Ship {
     let force = p5.Vector.fromAngle(radians(this.direction)).setMag(0.2);
     this.velocity.add(force);
     this.velocity.limit(this.maxSpeed);
+    this.collider.position = this.position;
   }
 
   hyperSpace() {
@@ -55,6 +58,8 @@ class Ship {
       let newY = random(0 + this.size / 2, height - this.size / 2);
 
       this.position = createVector(newX, newY);
+      this.collider.position = this.position;
+
       this.hyperSpaceTimer = 0;
     }
   }
@@ -70,10 +75,7 @@ class Ship {
       if (side == 1) {
         this.bullets.push(
           new Bullet(
-            createVector(
-              this.position.x,
-              this.position.y,
-            ),
+            createVector(this.position.x, this.position.y),
             5,
             "#2cfc03",
             this.directionVector.copy(),
@@ -81,7 +83,7 @@ class Ship {
             this.velocity.copy()
           )
         );
-        
+
         /*this.shootBullet(2);
       } else if (side == 2) {
         this.bullets.push(
@@ -99,9 +101,9 @@ class Ship {
         );
       }
 */
-      this.numBullets++;
-      this.bulletTimer = 0;
+        this.numBullets++;
+        this.bulletTimer = 0;
+      }
     }
   }
-}
 }

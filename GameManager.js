@@ -2,7 +2,7 @@ let ship;
 let controller;
 let soundManager;
 let score = 0;
-const NUM_ASTEROIDS = 6;
+const NUM_ASTEROIDS = 7;
 let largeAsteroids = [];
 let mediumAsteroids = [];
 let smallAsteroids = [];
@@ -20,11 +20,19 @@ let mediumScore = 2000;
 let smallScore = 3000;
 
 class GameManager {
-  createGameObjects(shipImage, asteroidImage, medAsteroidImg1, medAsteroidImg2, smallAsteroidImg, bgMusic, font) {
+  createGameObjects(
+    shipImage,
+    asteroidImage,
+    medAsteroidImg1,
+    medAsteroidImg2,
+    smallAsteroidImg,
+    bgMusic,
+    font
+  ) {
     let asteroid;
     controller = new GameController();
     ship = controller.createShip(shipImage);
-    largeAsteroidsImg= asteroidImage;
+    largeAsteroidsImg = asteroidImage;
     medAsteroidImg1 = medAsteroidImg1;
     medAsteroidImg2 = medAsteroidImg2;
     smAsteroidImg = smallAsteroidImg;
@@ -49,8 +57,8 @@ class GameManager {
           ship.bullets[i].shoot();
           controller.wrap(ship.bullets[i]);
           ship.bullets[i].timer();
-  
-          if(ship.bullets[i].getTime() > maxBulletTime){
+
+          if (ship.bullets[i].getTime() > maxBulletTime) {
             ship.bullets.shift();
           }
         }
@@ -65,8 +73,6 @@ class GameManager {
       //hud
       hud.drawScore(score);
       hud.drawLives(lives);
-
-  
     } else {
       hud.endScreen();
     }
@@ -81,29 +87,29 @@ class GameManager {
 
   changeScore(change) {
     score += change;
-    if((score/10000) >= livesGained){
+    if (score / 10000 >= livesGained) {
       print("Extra");
-      lives+= 1;
-      livesGained+= 1;
+      lives += 1;
+      livesGained += 1;
     }
   }
 
-  asteroidBreak(size, pos, velocity){
+  asteroidBreak(size, pos, velocity) {
     let newA;
     let direction = createVector(random(-1, 1), random(-1, 1));
-    if(size == 2){
-    newA = new Asteroid(mediumAsteroidImg1, pos, 96, velocity, direction);
-    } 
-    if(size == 3){
+    if (size == 2) {
+      newA = new Asteroid(mediumAsteroidImg1, pos, 96, velocity, direction);
+    }
+    if (size == 3) {
       newA = new Asteroid(mediumAsteroidImg2, pos, 96, velocity, direction);
-    } 
-     if(size == 4){
+    }
+    if (size == 4) {
       newA = new Asteroid(smAsteroidImg, pos, 96, velocity, direction);
     }
     return newA;
   }
 
-  checkAsteroids(size, stage){
+  checkAsteroids(size, stage) {
     for (let i = 0; i < size.length; i++) {
       size[i].draw();
       size[i].move();
@@ -117,26 +123,35 @@ class GameManager {
       for (let j = 0; j < ship.bullets.length; j++) {
         if (
           controller.checkCollisions(ship.bullets[j], size[i]) &&
-          ship.bullets[j] != null && size[i] !=null
+          ship.bullets[j] != null &&
+          size[i] != null
         ) {
-          if(stage ==1){
-            mediumAsteroids.push(this.asteroidBreak(2,size[i].position.copy(), size[i].velocity));
-            mediumAsteroids.push(this.asteroidBreak(3,size[i].position.copy(), size[i].velocity));
+          if (stage == 1) {
+            mediumAsteroids.push(
+              this.asteroidBreak(2, size[i].position.copy(), size[i].velocity)
+            );
+            mediumAsteroids.push(
+              this.asteroidBreak(3, size[i].position.copy(), size[i].velocity)
+            );
             largeAsteroids.splice(i, 1);
             this.changeScore(largeScore);
-          } 
-           if(stage ==2){
-            smallAsteroids.push(this.asteroidBreak(4,size[i].position.copy(), size[i].velocity));
-            smallAsteroids.push(this.asteroidBreak(4,size[i].position.copy(), size[i].velocity));
+          }
+          if (stage == 2) {
+            smallAsteroids.push(
+              this.asteroidBreak(4, size[i].position.copy(), size[i].velocity)
+            );
+            smallAsteroids.push(
+              this.asteroidBreak(4, size[i].position.copy(), size[i].velocity)
+            );
             mediumAsteroids.splice(i, 1);
             this.changeScore(mediumScore);
           }
-          if(stage ==3){
+          if (stage == 3) {
             smallAsteroids.splice(i, 1);
             this.changeScore(smallScore);
           }
-          ship.bullets.splice(j,1);
-        } 
+          ship.bullets.splice(j, 1);
+        }
       }
     }
   }
