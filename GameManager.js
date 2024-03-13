@@ -8,15 +8,16 @@ let mediumAsteroids = [];
 let smallAsteroids = [];
 let hud;
 let lives = 3;
+let livesGained = 1;
 let gameRunning = true;
 let maxBulletTime = 200;
 let largeAsteroidsImg;
 let medAsteroidImg1;
 let medAsteroidImg2;
 let smAsteroidImg;
-let largeScore = 100;
-let mediumScore = largeScore + largeScore/2; 
-let smallScore = mediumScore + mediumScore/2;
+let largeScore = 1000;
+let mediumScore = 2000;
+let smallScore = 3000;
 
 class GameManager {
   createGameObjects(shipImage, asteroidImage, medAsteroidImg1, medAsteroidImg2, smallAsteroidImg, bgMusic, font) {
@@ -64,6 +65,8 @@ class GameManager {
       //hud
       hud.drawScore(score);
       hud.drawLives(lives);
+
+  
     } else {
       hud.endScreen();
     }
@@ -78,6 +81,11 @@ class GameManager {
 
   changeScore(change) {
     score += change;
+    if((score/10000) >= livesGained){
+      print("Extra");
+      lives+= 1;
+      livesGained+= 1;
+    }
   }
 
   asteroidBreak(size, pos, velocity){
