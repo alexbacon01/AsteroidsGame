@@ -23,6 +23,7 @@ let saucerInterval = 1000;
 let gameStarted = false;
 let saucer;
 let numSaucers = 0;
+let restart = false;
 
 class GameManager {
   createGameObjects(
@@ -126,6 +127,11 @@ class GameManager {
         ship.lives = startLives;
         score = 0;
         gameRunning = true;
+        largeAsteroids = [];
+        mediumAsteroids = [];
+        smallAsteroids = [];
+        saucers = [];
+        restart = true;
       }
     }
     if (!gameRunning && !gameStarted) {
@@ -185,7 +191,6 @@ class GameManager {
         5
       );
     }
-    print("BREAK");
     return newA;
   }
 

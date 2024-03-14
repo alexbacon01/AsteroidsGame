@@ -52,4 +52,21 @@ function setup() {
 function draw() {
   background(0);
   gameManager.drawGame();
+  if (restart) {
+    gameManager.createGameObjects(
+      shipImg,
+      asteroidImg,
+      mediumAsteroidImg1,
+      mediumAsteroidImg2,
+      smallAsteroidImg,
+      bgMusic,
+      gameFont,
+      saucerSFX,
+      engineSFX,
+      hyperspaceSFX,
+      asteroidSFX,
+      shotSFX
+    );
+    restart = false;
+  }
 }
