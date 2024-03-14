@@ -91,7 +91,6 @@ class GameManager {
 
           controller.showBullets(saucers[i])
           
-          print("lives" +  saucers[i].lives);
           if(saucers[i].lives == 0){
             saucers.splice(i, 1);
           }
@@ -114,7 +113,6 @@ class GameManager {
     if(!gameRunning && gameStarted) {
       hud.endScreen();
       if(hud.restartButton.clicked()){
-        print("restart");
         ship.lives = startLives;
         score = 0;
         gameRunning = true;
@@ -139,7 +137,6 @@ class GameManager {
   changeScore(change) {
     score += change;
     if (score / 10000 >= livesGained) {
-      print("Extra");
       ship.lives += 1;
       livesGained += 1;
     }
@@ -149,14 +146,15 @@ class GameManager {
     let newA;
     let direction = createVector(random(-1, 1), random(-1, 1));
     if (size == 2) {
-      newA = new Asteroid(mediumAsteroidImg1, pos, 64, velocity, direction);
+      newA = new Asteroid(mediumAsteroidImg1, pos, 64, velocity.copy(), direction, 3);
     }
     if (size == 3) {
-      newA = new Asteroid(mediumAsteroidImg2, pos, 64, velocity, direction);
+      newA = new Asteroid(mediumAsteroidImg2, pos, 64, velocity.copy(), direction, 3);
     }
     if (size == 4) {
-      newA = new Asteroid(smAsteroidImg, pos, 32, velocity, direction);
+      newA = new Asteroid(smAsteroidImg, pos, 32, velocity.copy(), direction, 5);
     }
+    print("BREAK");
     return newA;
   }
 
@@ -168,6 +166,7 @@ class GameManager {
     for (let i = 0; i < size.length; i++) {
       size[i].draw();
       size[i].move();
+      print(size[i].velocity);
       if (controller.checkCollisions(size[i], object)) {
         //check for object and asteroid collisions
         if (ship.lives > 0 &&isShip) {
@@ -182,10 +181,10 @@ class GameManager {
         ) {
           if (stage == 1) {
             mediumAsteroids.push(
-              this.asteroidBreak(2, size[i].position.copy(), size[i].velocity)
+              this.asteroidBreak(2, size[i].position.copy(), size[i].velocity.copy())
             );
             mediumAsteroids.push(
-              this.asteroidBreak(3, size[i].position.copy(), size[i].velocity)
+              this.asteroidBreak(3, size[i].position.copy(), size[i].velocity.copy())
             );
             largeAsteroids.splice(i, 1);
             if(isShip){
@@ -194,10 +193,10 @@ class GameManager {
           }
           if (stage == 2) {
             smallAsteroids.push(
-              this.asteroidBreak(4, size[i].position.copy(), size[i].velocity)
+              this.asteroidBreak(4, size[i].position.copy(), size[i].velocity.copy())
             );
             smallAsteroids.push(
-              this.asteroidBreak(4, size[i].position.copy(), size[i].velocity)
+              this.asteroidBreak(4, size[i].position.copy(), size[i].velocity.copy())
             );
             mediumAsteroids.splice(i, 1);
 

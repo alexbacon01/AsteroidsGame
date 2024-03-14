@@ -42,9 +42,7 @@ class Saucer{
       shoot(shipPos){
         let m = (shipPos.y - this.position.y) / (shipPos.x - this.position.x);
          this.angle = atan(m);
-        print(this.bulletTimer);
        if (this.bulletTimer > this.bulletCooldown) {
-            print("Shoot")
               this.bullets.push(
                 new Bullet(
                   createVector(this.position.x, this.position.y),

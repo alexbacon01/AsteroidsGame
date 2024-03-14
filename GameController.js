@@ -7,7 +7,7 @@ class GameController {
     return ship;
   }
 
-  createAsteroid(image, size) {
+  createAsteroid(image, size, multiplier) {
     let x = random(0 + size / 2, width - size / 2);
     let y = random(0 + size / 2, height - size / 2);
 
@@ -18,7 +18,7 @@ class GameController {
       size,
       createVector(0, 0),
       createVector(random(-1, 1), random(-1, 1)),
-      random(0, 360)
+      random(0, 360), multiplier
     );
     return asteroid;
   }
