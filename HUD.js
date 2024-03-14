@@ -1,6 +1,8 @@
 class HUD {
     constructor(font){
         this.font = font;
+        this.startButton = new Button(createVector(width/2, height - height/3), createVector(width/3, height/6), "Start", this.font);
+        this.restartButton = new Button(createVector(width/2, height - height/3), createVector(width/3, height/6), "Restart", this.font);
     }
     drawScore(score){
         this.setFont();
@@ -18,7 +20,9 @@ class HUD {
         this.setFont();
         let string = "game over";
         textSize(width/10);
-        text(string, width/2, height/2);
+        text(string, width/2, height/3);
+
+        this.restartButton.draw();
     }
 
     setFont(){
@@ -26,6 +30,16 @@ class HUD {
         fill(255);
         textSize(width/40);
         textAlign(CENTER);
+    }
+
+    titleScreen(){
+        this.setFont();
+        let string = "Asteroids"
+        textSize(width/12);
+        text(string, width/2, height/3);
+
+        this.startButton.draw();
+
     }
 
 }

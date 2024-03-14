@@ -7,7 +7,8 @@ let largeAsteroids = [];
 let mediumAsteroids = [];
 let smallAsteroids = [];
 let hud;
-let lives = 3;
+let startLives = 3;
+let lives = startLives;
 let livesGained = 1;
 let gameRunning = true;
 let maxBulletTime = 200;
@@ -18,6 +19,7 @@ let smAsteroidImg;
 let largeScore = 1000;
 let mediumScore = 2000;
 let smallScore = 3000;
+let gameStarted = false;
 
 class GameManager {
   createGameObjects(
@@ -37,7 +39,7 @@ class GameManager {
     medAsteroidImg2 = medAsteroidImg2;
     smAsteroidImg = smallAsteroidImg;
     soundManager = new SoundManager(bgMusic);
-    soundManager.backgroundMusic();
+   // soundManager.backgroundMusic();
     hud = new HUD(font);
     for (let i = 0; i < NUM_ASTEROIDS; i++) {
       asteroid = controller.createAsteroid(asteroidImage, 96);
@@ -73,16 +75,30 @@ class GameManager {
       //hud
       hud.drawScore(score);
       hud.drawLives(lives);
-    } else {
+    } 
+    if(!gameRunning && gameStarted) {
       hud.endScreen();
+      if(hud.restartButton.clicked()){
+        print("restart");
+        lives = startLives;
+        score = 0;
+        gameRunning = true;
+      }
+    } 
+    if(!gameRunning && !gameStarted) {
+      hud.titleScreen();
+      if(hud.startButton.clicked()){
+        gameStarted= true;
+      }
     }
-
+    print(gameRunning)
     //end game
-    if (lives > 0) {
+    if (lives > 0 && gameStarted) {
       gameRunning = true;
     } else {
       gameRunning = false;
     }
+
   }
 
   changeScore(change) {
@@ -98,13 +114,13 @@ class GameManager {
     let newA;
     let direction = createVector(random(-1, 1), random(-1, 1));
     if (size == 2) {
-      newA = new Asteroid(mediumAsteroidImg1, pos, 96, velocity, direction);
+      newA = new Asteroid(mediumAsteroidImg1, pos, 64, velocity, direction);
     }
     if (size == 3) {
-      newA = new Asteroid(mediumAsteroidImg2, pos, 96, velocity, direction);
+      newA = new Asteroid(mediumAsteroidImg2, pos, 64, velocity, direction);
     }
     if (size == 4) {
-      newA = new Asteroid(smAsteroidImg, pos, 96, velocity, direction);
+      newA = new Asteroid(smAsteroidImg, pos, 32, velocity, direction);
     }
     return newA;
   }
