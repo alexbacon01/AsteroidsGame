@@ -17,8 +17,8 @@ let medAsteroidImg1;
 let medAsteroidImg2;
 let smAsteroidImg;
 let largeScore = 100;
-let mediumScore = 150;
-let smallScore = 200;
+let mediumScore = 200;
+let smallScore = 300;
 let saucerInterval = 1000;
 let gameStarted = false;
 let saucer;
@@ -57,7 +57,7 @@ class GameManager {
     soundManager.backgroundMusic();
     hud = new HUD(font);
     for (let i = 0; i < NUM_ASTEROIDS; i++) {
-      asteroid = controller.createAsteroid(asteroidImage, 96);
+      asteroid = controller.createAsteroid(asteroidImage, 96, 1.1);
       largeAsteroids[i] = asteroid;
     }
   }
@@ -68,7 +68,7 @@ class GameManager {
 
       //ship
       ship.draw();
-      if (score / saucerInterval >= numSaucers) {
+      if (score / saucerInterval > numSaucers) {
         saucers.push(controller.createSaucer(96));
         soundManager.playSound(saucerSFX);
         numSaucers++;
@@ -78,6 +78,7 @@ class GameManager {
           saucers[i].draw();
           saucers[i].move();
           saucers[i].shoot(ship.position);
+          controller.wrap(saucers[i]);
           this.checkAsteroids(largeAsteroids, 1, saucers[i]);
           this.checkAsteroids(mediumAsteroids, 2, saucers[i]);
           this.checkAsteroids(smallAsteroids, 3, saucers[i]);
@@ -90,6 +91,7 @@ class GameManager {
 
           for (let j = 0; j < saucers[i].bullets.length; j++) {
             if (controller.checkCollisions(ship, saucers[i].bullets[j])) {
+              controller.wrap(saucers[i].bullets[j]);
               ship.lives -= 1;
               controller.respawnShip();
             }
@@ -98,6 +100,7 @@ class GameManager {
           for (let j = 0; j < ship.bullets.length; j++) {
             if (controller.checkCollisions(saucers[i], ship.bullets[j])) {
               saucers[i].lives -= 1;
+              this.changeScore(saucers[i].points);
             }
           }
 
@@ -140,7 +143,6 @@ class GameManager {
         gameStarted = true;
       }
     }
-    print(gameRunning);
     //end game
     if (ship.lives > 0 && gameStarted) {
       gameRunning = true;
@@ -161,6 +163,7 @@ class GameManager {
     soundManager.playSound(asteroidSFX);
     let newA;
     let direction = createVector(random(-1, 1), random(-1, 1));
+    print("break");
     if (size == 2) {
       newA = new Asteroid(
         mediumAsteroidImg1,
@@ -168,7 +171,7 @@ class GameManager {
         64,
         velocity.copy(),
         direction,
-        3
+        4
       );
     }
     if (size == 3) {
@@ -178,7 +181,7 @@ class GameManager {
         64,
         velocity.copy(),
         direction,
-        3
+        4
       );
     }
     if (size == 4) {
@@ -188,7 +191,7 @@ class GameManager {
         32,
         velocity.copy(),
         direction,
-        5
+        6
       );
     }
     return newA;
@@ -202,7 +205,6 @@ class GameManager {
     for (let i = 0; i < size.length; i++) {
       size[i].draw();
       size[i].move();
-      print(size[i].velocity);
       if (controller.checkCollisions(size[i], object)) {
         //check for object and asteroid collisions
         if (ship.lives > 0 && isShip) {

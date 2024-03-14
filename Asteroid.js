@@ -5,16 +5,16 @@ class Asteroid {
     this.image = image;
     this.velocity = velocity.copy();
     this.acceleration = acceleration;
-    this.speedLimit = 0.5;
+    this.speedLimit = 96 / size / 2;
     this.rotation = random(0, 360);
     this.collider = new Collider(this.position, this.size);
-    this.multiplier = multiplier;
+    this.multiplier = 1.3;
   }
 
   draw() {
     push();
     this.position.add(this.velocity);
-    this.velocity.mult(this.multiplier)
+    this.velocity.mult(this.multiplier);
     angleMode(DEGREES);
     translate(this.position.x, this.position.y);
     rotate((this.rotation += 0.1));

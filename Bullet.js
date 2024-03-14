@@ -4,7 +4,7 @@ class Bullet {
     this.size = size;
     this.colour = colour;
     this.velocity = velocity;
-    this.speedLimit = 8;
+    this.speedLimit = 12;
     this.angle = angle;
     this.direction = direction;
     this.time = 0;
@@ -29,7 +29,7 @@ class Bullet {
   }
 
   shoot() {
-    let force = this.direction.setMag(0.2);
+    let force = this.direction;
     this.velocity.add(force);
     this.velocity.limit(this.speedLimit);
   }

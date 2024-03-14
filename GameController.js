@@ -30,14 +30,14 @@ class GameController {
     return asteroid;
   }
 
-  createSaucer(size) {
+  createSaucer(saucerSize) {
     let x = -50;
-    let y = random(height - size, height / 3);
+    let y = random(height - saucerSize, height / 3);
 
-    let startPos = createVector(x, y);
+    let saucerStartPos = createVector(x, y);
     let saucer = new Saucer(
-      startPos,
-      size,
+      saucerStartPos,
+      saucerSize,
       createVector(0, 0),
       createVector(1, 0),
       random(0, 360),
