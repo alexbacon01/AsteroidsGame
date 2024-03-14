@@ -1,8 +1,12 @@
 class SoundManager {
-  constructor(music, saucerSFX, asteroidSFX, engineSFX, shotSFX, hyperspaceSFX) {
+  constructor(music) {
     this.bgMusic = music;
   }
   backgroundMusic() {
     this.bgMusic.loop();
+  }
+
+  playSound(sound) {
+    sound.play();
   }
 }

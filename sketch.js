@@ -12,32 +12,44 @@ let asteroidSFX;
 let shotSFX;
 let gameFont;
 
-function preload(){
+function preload() {
   //load pictures
-  shipImg = loadImage('Images/xwingImage.png'); 
-  asteroidImg = loadImage('Images/asteroid.png');
-  mediumAsteroidImg1 = loadImage('Images/mediumAsteroid.png');
-  mediumAsteroidImg2 = loadImage('Images/mediumAsteroid2.png');
-  smallAsteroidImg = loadImage('Images/smallAsteroid.png');
+  shipImg = loadImage("Images/xwingImage.png");
+  asteroidImg = loadImage("Images/asteroid.png");
+  mediumAsteroidImg1 = loadImage("Images/mediumAsteroid.png");
+  mediumAsteroidImg2 = loadImage("Images/mediumAsteroid2.png");
+  smallAsteroidImg = loadImage("Images/smallAsteroid.png");
   //load sounds
-  bgMusic = loadSound('Sounds/AsteroidsBackgroundMusic.mp3');
-  saucerSFX = loadSound('Sounds/Saucer.mp3');
-  engineSFX = loadSound('Sounds/EngineFire.mp3');
-  hyperspaceSFX = loadSound('Sounds/Hyperspace.mp3');
-  asteroidSFX = loadSound('Sounds/AsteroidBreak.mp3');
-  shotSFX = loadSound('Sounds/ShipShot.mp3');
+  bgMusic = loadSound("Sounds/AsteroidsBackgroundMusic.mp3");
+  saucerSFX = loadSound("Sounds/Saucer.mp3");
+  engineSFX = loadSound("Sounds/EngineFire.mp3");
+  hyperspaceSFX = loadSound("Sounds/Hyperspace.mp3");
+  asteroidSFX = loadSound("Sounds/AsteroidBreak.mp3");
+  shotSFX = loadSound("Sounds/ShipShot.mp3");
   //load font
-  gameFont = loadFont('Fonts/StarJediRounded.ttf');
+  gameFont = loadFont("Fonts/StarJediRounded.ttf");
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   gameManager = new GameManager();
-  gameManager.createGameObjects(shipImg, asteroidImg, mediumAsteroidImg1, mediumAsteroidImg2, smallAsteroidImg, bgMusic, gameFont);
+  gameManager.createGameObjects(
+    shipImg,
+    asteroidImg,
+    mediumAsteroidImg1,
+    mediumAsteroidImg2,
+    smallAsteroidImg,
+    bgMusic,
+    gameFont,
+    saucerSFX,
+    engineSFX,
+    hyperspaceSFX,
+    asteroidSFX,
+    shotSFX
+  );
 }
 
 function draw() {
   background(0);
   gameManager.drawGame();
-
 }

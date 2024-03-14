@@ -1,9 +1,15 @@
 let maxBulletTime = 200;
+let engineSound;
+let hyperspaceSound;
+let shotSound;
 class GameController {
-  createShip(image, startingLives) {
+  createShip(image, startingLives, engineSFX, hyperspaceSFX, shotSFX) {
     let shipStartPos = createVector(width / 2, height / 2);
     let shipMass = createVector(5, 5);
     let ship = new Ship(image, 64, shipStartPos, shipMass, startingLives);
+    engineSound = engineSFX;
+    hyperspaceSound = hyperspaceSFX;
+    shotSound = shotSFX;
     return ship;
   }
 
@@ -18,14 +24,15 @@ class GameController {
       size,
       createVector(0, 0),
       createVector(random(-1, 1), random(-1, 1)),
-      random(0, 360), multiplier
+      random(0, 360),
+      multiplier
     );
     return asteroid;
   }
 
-  createSaucer(size){
+  createSaucer(size) {
     let x = -50;
-    let y = random(height - size,  height/3);
+    let y = random(height - size, height / 3);
 
     let startPos = createVector(x, y);
     let saucer = new Saucer(
@@ -33,7 +40,8 @@ class GameController {
       size,
       createVector(0, 0),
       createVector(1, 0),
-      random(0, 360), 75
+      random(0, 360),
+      75
     );
     return saucer;
   }
@@ -53,10 +61,12 @@ class GameController {
     if (keyIsDown(70)) {
       //F key
       ship.hyperSpace();
+      soundManager.playSound(hyperspaceSFX);
     }
 
     if (keyIsDown(32)) {
       ship.shootBullet(1);
+      soundManager.playSound(shotSFX);
     }
   }
 
@@ -74,7 +84,7 @@ class GameController {
     }
   }
 
-  showBullets(object){
+  showBullets(object) {
     for (let i = 0; i < object.bullets.length; i++) {
       if (object.bullets[i] != null) {
         object.bullets[i].draw();
@@ -90,23 +100,23 @@ class GameController {
   }
 
   checkCollisions(object1, object2) {
-    if(object1 != null && object2 != null){
+    if (object1 != null && object2 != null) {
       let size1 = object1.collider.size / 2;
       let size2 = object2.collider.size / 2;
-    
 
-    if (
-      object1.collider.position.x + size1 >=
-        object2.collider.position.x - size2 &&
-      object1.collider.position.x - size1 <=
-        object2.collider.position.x + size2 &&
-      object1.collider.position.y + size1 >=
-        object2.collider.position.y - size2 &&
-      object1.collider.position.y - size1 <= object2.collider.position.y + size2
-    ) {
-      return true;
+      if (
+        object1.collider.position.x + size1 >=
+          object2.collider.position.x - size2 &&
+        object1.collider.position.x - size1 <=
+          object2.collider.position.x + size2 &&
+        object1.collider.position.y + size1 >=
+          object2.collider.position.y - size2 &&
+        object1.collider.position.y - size1 <=
+          object2.collider.position.y + size2
+      ) {
+        return true;
+      }
     }
-  }
   }
 
   respawnShip() {
