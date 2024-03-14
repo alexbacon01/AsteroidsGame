@@ -1,5 +1,5 @@
 class Ship {
-  constructor(image, size, position, mass) {
+  constructor(image, size, position, mass, lives) {
     this.image = image;
     this.size = size;
     this.position = position;
@@ -18,6 +18,7 @@ class Ship {
     this.bulletCooldown = 20;
     this.bullets = [];
     this.collider = new Collider(this.position, this.size - 10);
+    this.lives = lives;
   }
 
   draw() {
@@ -77,7 +78,7 @@ class Ship {
           new Bullet(
             createVector(this.position.x, this.position.y),
             5,
-            "#2cfc03",
+            "c93312",
             this.directionVector.copy(),
             this.angle,
             this.velocity.copy()
@@ -101,7 +102,6 @@ class Ship {
         );
       }
 */
-        this.numBullets++;
         this.bulletTimer = 0;
       }
     }

@@ -6,20 +6,23 @@ const NUM_ASTEROIDS = 7;
 let largeAsteroids = [];
 let mediumAsteroids = [];
 let smallAsteroids = [];
+let saucers = [];
 let hud;
 let startLives = 3;
 let lives = startLives;
 let livesGained = 1;
 let gameRunning = true;
-let maxBulletTime = 200;
 let largeAsteroidsImg;
 let medAsteroidImg1;
 let medAsteroidImg2;
 let smAsteroidImg;
-let largeScore = 1000;
-let mediumScore = 2000;
-let smallScore = 3000;
+let largeScore = 100;
+let mediumScore = 150;
+let smallScore = 200;
+let saucerInterval = 1000;
 let gameStarted = false;
+let saucer;
+let numSaucers = 0;
 
 class GameManager {
   createGameObjects(
@@ -33,7 +36,7 @@ class GameManager {
   ) {
     let asteroid;
     controller = new GameController();
-    ship = controller.createShip(shipImage);
+    ship = controller.createShip(shipImage, startLives);
     largeAsteroidsImg = asteroidImage;
     medAsteroidImg1 = medAsteroidImg1;
     medAsteroidImg2 = medAsteroidImg2;
@@ -53,34 +56,66 @@ class GameManager {
 
       //ship
       ship.draw();
-      for (let i = 0; i < ship.bullets.length; i++) {
-        if (ship.bullets[i] != null) {
-          ship.bullets[i].draw();
-          ship.bullets[i].shoot();
-          controller.wrap(ship.bullets[i]);
-          ship.bullets[i].timer();
+      if(score/saucerInterval>= numSaucers){
+        saucers.push(controller.createSaucer(96));
+        numSaucers++;
+      }
+      for(let i = 0; i< saucers.length; i++){
+        if(saucers[i] !=null){
+          saucers[i].draw();
+          saucers[i].move();
+          saucers[i].shoot(ship.position);
+          this.checkAsteroids(largeAsteroids, 1,saucers[i]);
+          this.checkAsteroids(mediumAsteroids, 2, saucers[i]);
+          this.checkAsteroids(smallAsteroids, 3, saucers[i]);
 
-          if (ship.bullets[i].getTime() > maxBulletTime) {
-            ship.bullets.shift();
+          if(controller.checkCollisions(ship, saucers[i])){
+            saucers[i].lives -= 1;
+            ship.lives -= 1;
+            controller.respawnShip();
+          }
+
+          for(let j =0 ; j<saucers[i].bullets.length; j++){
+            if(controller.checkCollisions(ship, saucers[i].bullets[j])){
+              ship.lives -= 1;
+              controller.respawnShip();
+            }
+          }
+
+          for(let j =0 ; j<ship.bullets.length; j++){
+            if(controller.checkCollisions(saucers[i], ship.bullets[j])){
+              saucers[i].lives -= 1;
+            }
+          }
+          
+
+          controller.showBullets(saucers[i])
+          
+          print("lives" +  saucers[i].lives);
+          if(saucers[i].lives == 0){
+            saucers.splice(i, 1);
           }
         }
       }
+  
+      controller.showBullets(ship);
       controller.wrap(ship);
 
       //asteroids
-      this.checkAsteroids(largeAsteroids, 1);
-      this.checkAsteroids(mediumAsteroids, 2);
-      this.checkAsteroids(smallAsteroids, 3);
+      this.checkAsteroids(largeAsteroids, 1,ship);
+      this.checkAsteroids(mediumAsteroids, 2, ship);
+      this.checkAsteroids(smallAsteroids, 3, ship);
+
 
       //hud
       hud.drawScore(score);
-      hud.drawLives(lives);
+      hud.drawLives(ship.lives);
     } 
     if(!gameRunning && gameStarted) {
       hud.endScreen();
       if(hud.restartButton.clicked()){
         print("restart");
-        lives = startLives;
+        ship.lives = startLives;
         score = 0;
         gameRunning = true;
       }
@@ -93,7 +128,7 @@ class GameManager {
     }
     print(gameRunning)
     //end game
-    if (lives > 0 && gameStarted) {
+    if (ship.lives > 0 && gameStarted) {
       gameRunning = true;
     } else {
       gameRunning = false;
@@ -105,7 +140,7 @@ class GameManager {
     score += change;
     if (score / 10000 >= livesGained) {
       print("Extra");
-      lives += 1;
+      ship.lives += 1;
       livesGained += 1;
     }
   }
@@ -125,22 +160,25 @@ class GameManager {
     return newA;
   }
 
-  checkAsteroids(size, stage) {
+  checkAsteroids(size, stage, object) {
+    let isShip = false;
+    if(object == ship){
+      isShip = true;
+    }
     for (let i = 0; i < size.length; i++) {
       size[i].draw();
       size[i].move();
-      if (controller.checkCollisions(size[i], ship)) {
-        //check for ship and asteroid collisions
-        if (lives > 0) {
+      if (controller.checkCollisions(size[i], object)) {
+        //check for object and asteroid collisions
+        if (ship.lives > 0 &&isShip) {
           controller.respawnShip();
         }
+        object.lives -= 1;
       }
       controller.wrap(size[i]);
-      for (let j = 0; j < ship.bullets.length; j++) {
+      for (let j = 0; j < object.bullets.length; j++) {
         if (
-          controller.checkCollisions(ship.bullets[j], size[i]) &&
-          ship.bullets[j] != null &&
-          size[i] != null
+          controller.checkCollisions(object.bullets[j], size[i])
         ) {
           if (stage == 1) {
             mediumAsteroids.push(
@@ -150,7 +188,9 @@ class GameManager {
               this.asteroidBreak(3, size[i].position.copy(), size[i].velocity)
             );
             largeAsteroids.splice(i, 1);
-            this.changeScore(largeScore);
+            if(isShip){
+              this.changeScore(largeScore);
+            }
           }
           if (stage == 2) {
             smallAsteroids.push(
@@ -160,13 +200,18 @@ class GameManager {
               this.asteroidBreak(4, size[i].position.copy(), size[i].velocity)
             );
             mediumAsteroids.splice(i, 1);
+
+            if(isShip){
             this.changeScore(mediumScore);
+            }
           }
           if (stage == 3) {
             smallAsteroids.splice(i, 1);
+            if(isShip){
             this.changeScore(smallScore);
+            }
           }
-          ship.bullets.splice(j, 1);
+          object.bullets.splice(j, 1);
         }
       }
     }

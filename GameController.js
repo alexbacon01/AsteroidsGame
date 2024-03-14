@@ -1,8 +1,9 @@
+let maxBulletTime = 200;
 class GameController {
-  createShip(image) {
+  createShip(image, startingLives) {
     let shipStartPos = createVector(width / 2, height / 2);
     let shipMass = createVector(5, 5);
-    let ship = new Ship(image, 64, shipStartPos, shipMass);
+    let ship = new Ship(image, 64, shipStartPos, shipMass, startingLives);
     return ship;
   }
 
@@ -20,6 +21,21 @@ class GameController {
       random(0, 360)
     );
     return asteroid;
+  }
+
+  createSaucer(size){
+    let x = -50;
+    let y = random(height - size,  height/3);
+
+    let startPos = createVector(x, y);
+    let saucer = new Saucer(
+      startPos,
+      size,
+      createVector(0, 0),
+      createVector(1, 0),
+      random(0, 360), 50
+    );
+    return saucer;
   }
 
   checkInputs() {
@@ -58,9 +74,27 @@ class GameController {
     }
   }
 
+  showBullets(object){
+    for (let i = 0; i < object.bullets.length; i++) {
+      if (object.bullets[i] != null) {
+        object.bullets[i].draw();
+        object.bullets[i].shoot();
+        this.wrap(object.bullets[i]);
+        object.bullets[i].timer();
+
+        if (object.bullets[i].getTime() > maxBulletTime) {
+          object.bullets.shift();
+        }
+      }
+    }
+  }
+
   checkCollisions(object1, object2) {
-    let size1 = object1.collider.size / 2;
-    let size2 = object2.collider.size / 2;
+    if(object1 != null && object2 != null){
+      let size1 = object1.collider.size / 2;
+      let size2 = object2.collider.size / 2;
+    
+
     if (
       object1.collider.position.x + size1 >=
         object2.collider.position.x - size2 &&
@@ -73,12 +107,12 @@ class GameController {
       return true;
     }
   }
+  }
 
   respawnShip() {
     ship.position = createVector(width / 2, height / 2);
     ship.velocity = createVector(0, 0);
     ship.angle = -90;
     ship.collider.position = ship.position;
-    lives--;
   }
 }
