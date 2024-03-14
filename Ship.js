@@ -72,6 +72,7 @@ class Ship {
 
   shootBullet(side) {
     //1 == left 2 ==right
+    let knockBack = p5.Vector.fromAngle(radians(this.direction)).setMag(-0.5);
     if (this.bulletTimer > this.bulletCooldown) {
       if (side == 1) {
         this.bullets.push(
@@ -101,7 +102,8 @@ class Ship {
           )
         );
       }
-*/
+*/      this.velocity.add(knockBack)
+        this.velocity.limit(this.maxSpeed);
         this.bulletTimer = 0;
       }
     }

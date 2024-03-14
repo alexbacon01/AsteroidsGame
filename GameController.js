@@ -33,7 +33,7 @@ class GameController {
       size,
       createVector(0, 0),
       createVector(1, 0),
-      random(0, 360), 50
+      random(0, 360), 75
     );
     return saucer;
   }
