@@ -31,7 +31,8 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(1920, 1080);
+  createCanvas(700, 700);
+
   gameManager = new GameManager();
   gameManager.createGameObjects(
     shipImg,

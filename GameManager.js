@@ -26,6 +26,14 @@ let numSaucers = 0;
 let restart = false;
 
 class GameManager {
+  constructor() {
+    this.leaderboard = new Array(10);
+    this.name;
+    this.showLeaders = false;
+    this.input = createInput("");
+    this.input.position(width / 3, height / 2.5);
+    this.input.size(width / 3);
+  }
   createGameObjects(
     shipImage,
     asteroidImage,
@@ -125,7 +133,9 @@ class GameManager {
       hud.drawLives(ship.lives);
     }
     if (!gameRunning && gameStarted) {
-      hud.endScreen();
+      hud.endScreen(score);
+
+      this.storeScore(this.name, score);
       if (hud.restartButton.clicked()) {
         ship.lives = startLives;
         score = 0;
@@ -136,10 +146,28 @@ class GameManager {
         saucers = [];
         restart = true;
       }
+
+      if (hud.leaderboardButton.clicked()) {
+        this.showLeaders = true;
+      }
     }
     if (!gameRunning && !gameStarted) {
       hud.titleScreen();
+      this.name = this.input.value();
+      if (hud.startButton.clicked() && this.name != "") {
+        this.input.position(-1000, -1000);
+        gameStarted = true;
+      }
+      if (hud.leaderboardButton.clicked()) {
+        this.showLeaders = true;
+      }
+    }
+
+    if (this.showLeaders) {
+      hud.displayLeader(this.leaderboard);
+      this.input.position(-1000, -1000);
       if (hud.startButton.clicked()) {
+        this.showLeaders = false;
         gameStarted = true;
       }
     }
@@ -264,6 +292,26 @@ class GameManager {
           }
           object.bullets.splice(j, 1);
         }
+      }
+    }
+  }
+
+  storeScore(name, score) {
+    for (let i = 0; i < 11; i++) {
+      let val = i;
+      if (getItem(val.toString()) < score) {
+        storeItem((val + 1).toString(), getItem(val.toString()));
+        storeItem(val + 1 + "name", getItem((val + 1 + "name").toString()));
+        storeItem(val.toString(), score);
+        storeItem(val + "name", name);
+        this.score = 0;
+        return;
+        print(i);
+      } else if (getItem(val.toString()) == null) {
+        storeItem(val.toString(), score);
+        storeItem(val + "name", name);
+        this.score = 0;
+        return;
       }
     }
   }
