@@ -10,6 +10,7 @@ class GameManager {
     this.showLeaders = false;
     this.gameRunning = true;
     this.gameStarted = false;
+    this.shouldSave = true;
 
     //input box
     this.input = createInput("");
@@ -36,6 +37,7 @@ class GameManager {
     this.numSaucers = 0;
     this.livesGained = 1;
     this.startLives = 3;
+    this.currentLevel = 1;
 
     //asteroid scores
     this.largeScore = 100;
@@ -43,7 +45,8 @@ class GameManager {
     this.smallScore = 300;
 
     this.saucerInterval = 1000;
-    this.numAsteroids = 7;
+    this.numAsteroids = 5 + this.currentLevel * 2;
+    this.currentNumAsteroids = this.numAsteroids;
     this.restart = false;
   }
   createGameObjects(
@@ -167,6 +170,7 @@ class GameManager {
         this.smallAsteroids = [];
         this.saucers = [];
         this.restart = true;
+        this.shouldSave = true;
       }
 
       if (this.hud.leaderboardButton.clicked()) {
@@ -179,6 +183,7 @@ class GameManager {
       if (this.hud.startButton.clicked() && this.name != "") {
         this.input.position(-1000, -1000);
         this.gameStarted = true;
+        this.shouldSave = true;
       }
       if (this.hud.leaderboardButton.clicked()) {
         this.showLeaders = true;
@@ -198,6 +203,11 @@ class GameManager {
       this.gameRunning = true;
     } else {
       this.gameRunning = false;
+    }
+
+    print(this.currentNumAsteroids);
+    if (this.currentNumAsteroids == 0) {
+      this.nextLevel();
     }
   }
 
@@ -284,6 +294,7 @@ class GameManager {
             if (isShip) {
               this.changeScore(this.largeScore);
             }
+            this.currentNumAsteroids++;
           }
           if (stage == 2) {
             this.smallAsteroids.push(
@@ -301,13 +312,14 @@ class GameManager {
               )
             );
             this.mediumAsteroids.splice(i, 1);
-
+            this.currentNumAsteroids++;
             if (isShip) {
               this.changeScore(this.mediumScore);
             }
           }
           if (stage == 3) {
             this.smallAsteroids.splice(i, 1);
+            this.currentNumAsteroids--;
             if (isShip) {
               this.changeScore(this.smallScore);
             }
@@ -319,22 +331,32 @@ class GameManager {
   }
 
   storeScore(name, score) {
-    for (let i = 0; i < 11; i++) {
+    for (let i = 1; i < 11; i++) {
       let val = i;
-      if (getItem(val.toString()) < score) {
+      if (getItem(val.toString()) < score && this.shouldSave) {
         storeItem((val + 1).toString(), getItem(val.toString()));
         storeItem(val + 1 + "name", getItem((val + 1 + "name").toString()));
         storeItem(val.toString(), score);
         storeItem(val + "name", name);
-        this.score = 0;
+        this.shouldSave = false;
         return;
-        print(i);
-      } else if (getItem(val.toString()) == null) {
+      } else if (getItem(val.toString()) == null && this.shouldSave) {
         storeItem(val.toString(), score);
         storeItem(val + "name", name);
-        this.score = 0;
+        this.shouldSave = false;
         return;
       }
     }
+  }
+
+  nextLevel() {
+    this.currentLevel++;
+    this.gameRunning = true;
+    this.largeAsteroids = [];
+    this.mediumAsteroids = [];
+    this.smallAsteroids = [];
+    this.saucers = [];
+    this.restart = true;
+    this.currentNumAsteroids = this.numAsteroids;
   }
 }
