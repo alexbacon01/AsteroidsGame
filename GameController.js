@@ -46,7 +46,7 @@ class GameController {
     return saucer;
   }
 
-  checkInputs() {
+  checkInputs(ship) {
     if (keyIsDown(39)) {
       ship.rotateShip(2);
     } else if (keyIsDown(37)) {
@@ -119,7 +119,7 @@ class GameController {
     }
   }
 
-  respawnShip() {
+  respawnShip(ship) {
     ship.position = createVector(width / 2, height / 2);
     ship.velocity = createVector(0, 0);
     ship.angle = -90;

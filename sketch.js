@@ -53,7 +53,7 @@ function setup() {
 function draw() {
   background(0);
   gameManager.drawGame();
-  if (restart) {
+  if (gameManager.restart) {
     gameManager.createGameObjects(
       shipImg,
       asteroidImg,
@@ -68,6 +68,6 @@ function draw() {
       asteroidSFX,
       shotSFX
     );
-    restart = false;
+    gameManager.restart = false;
   }
 }
