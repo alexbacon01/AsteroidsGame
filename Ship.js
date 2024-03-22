@@ -71,41 +71,21 @@ class Ship {
   }
 
   shootBullet(side) {
-    //1 == left 2 ==right
     let knockBack = p5.Vector.fromAngle(radians(this.direction)).setMag(-0.5);
     if (this.bulletTimer > this.bulletCooldown) {
-      if (side == 1) {
-        this.bullets.push(
-          new Bullet(
-            createVector(this.position.x, this.position.y),
-            5,
-            "c93312",
-            this.directionVector.copy(),
-            this.angle,
-            this.velocity.copy()
-          )
-        );
-
-        /*this.shootBullet(2);
-      } else if (side == 2) {
-        this.bullets.push(
-          new Bullet(
-            createVector(
-              this.position.x + this.size / 2.4,
-              this.position.y - this.size / 20
-            ),
-            5,
-            "#2cfc03",
-            this.directionVector.copy(),
-            this.angle,
-            this.velocity.copy()
-          )
-        );
-      }
-*/      this.velocity.add(knockBack)
-        this.velocity.limit(this.maxSpeed);
-        this.bulletTimer = 0;
-      }
+      this.bullets.push(
+        new Bullet(
+          createVector(this.position.x, this.position.y),
+          5,
+          "c93312",
+          this.directionVector.copy(),
+          this.angle,
+          this.velocity.copy()
+        )
+      );
+      this.velocity.add(knockBack);
+      this.velocity.limit(this.maxSpeed);
+      this.bulletTimer = 0;
     }
   }
 }

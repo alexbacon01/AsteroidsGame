@@ -70,7 +70,7 @@ class HUD {
     for (let i = 1; i < 11; i++) {
       if (getItem(i.toString()) != null) {
         string = i + ". " + getItem(i + "name") + ": " + getItem(i);
-        text(string, width / 3, i * 40);
+        text(string, width / 3, i * 50);
       }
     }
 

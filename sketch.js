@@ -31,7 +31,7 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(700, 700);
+  createCanvas(800, 800);
   //clearStorage();
   gameManager = new GameManager();
   gameManager.createGameObjects(

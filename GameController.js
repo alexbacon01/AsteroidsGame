@@ -1,15 +1,17 @@
-let maxBulletTime = 200;
-let engineSound;
-let hyperspaceSound;
-let shotSound;
 class GameController {
+  constructor() {
+    this.hyperspaceSound;
+    this.shotSound;
+    this.engineSound;
+    this.maxBulletTime = 200;
+  }
   createShip(image, startingLives, engineSFX, hyperspaceSFX, shotSFX) {
     let shipStartPos = createVector(width / 2, height / 2);
     let shipMass = createVector(5, 5);
     let ship = new Ship(image, 64, shipStartPos, shipMass, startingLives);
-    engineSound = engineSFX;
-    hyperspaceSound = hyperspaceSFX;
-    shotSound = shotSFX;
+    this.engineSound = engineSFX;
+    this.hyperspaceSound = hyperspaceSFX;
+    this.shotSound = shotSFX;
     return ship;
   }
 
@@ -33,6 +35,16 @@ class GameController {
   createSaucer(saucerSize) {
     let x = -50;
     let y = random(height - saucerSize, height / 3);
+    let isSmall = false;
+    let rnd = floor(random(1, 5));
+    soundManager.playSound(saucerSFX);
+    if (rnd == 2) {
+      isSmall = true;
+    }
+
+    if (isSmall) {
+      saucerSize = saucerSize / 2;
+    }
 
     let saucerStartPos = createVector(x, y);
     let saucer = new Saucer(
@@ -40,8 +52,8 @@ class GameController {
       saucerSize,
       createVector(0, 0),
       createVector(1, 0),
-      random(0, 360),
-      75
+      150,
+      isSmall
     );
     return saucer;
   }
@@ -92,7 +104,7 @@ class GameController {
         this.wrap(object.bullets[i]);
         object.bullets[i].timer();
 
-        if (object.bullets[i].getTime() > maxBulletTime) {
+        if (object.bullets[i].getTime() > this.maxBulletTime) {
           object.bullets.shift();
         }
       }

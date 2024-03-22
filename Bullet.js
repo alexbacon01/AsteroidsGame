@@ -10,10 +10,11 @@ class Bullet {
     this.time = 0;
     this.alive = true;
     this.collider = new Collider(this.position, this.size - 10);
+    this.bulletLife = 50;
   }
 
   draw() {
-    this.collider.draw();
+    //this.collider.draw();
     push();
     angleMode(DEGREES);
     fill(this.colour);
