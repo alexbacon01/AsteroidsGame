@@ -4,7 +4,7 @@ class Asteroid {
     this.size = size;
     this.image = image;
     this.velocity = velocity.copy();
-    this.acceleration = acceleration;
+    this.acceleration = acceleration.copy();
     this.speedLimit = 96 / size / 2;
     this.rotation = random(0, 360);
     this.collider = new Collider(this.position, this.size);
@@ -21,7 +21,7 @@ class Asteroid {
     imageMode(CENTER);
     image(this.image, 0, 0);
     pop();
-    this.collider.draw();
+    //this.collider.draw();
   }
 
   move() {

@@ -32,7 +32,6 @@ function preload() {
 
 function setup() {
   createCanvas(800, 800);
-  //clearStorage();
   gameManager = new GameManager();
   gameManager.createGameObjects(
     shipImg,

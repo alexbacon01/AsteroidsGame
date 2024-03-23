@@ -1,17 +1,19 @@
 class GameController {
-  constructor() {
+  constructor(soundManager, engineSFX, hyperspaceSFX, shotSFX, saucerSFX) {
     this.hyperspaceSound;
     this.shotSound;
     this.engineSound;
     this.maxBulletTime = 200;
-  }
-  createShip(image, startingLives, engineSFX, hyperspaceSFX, shotSFX) {
-    let shipStartPos = createVector(width / 2, height / 2);
-    let shipMass = createVector(5, 5);
-    let ship = new Ship(image, 64, shipStartPos, shipMass, startingLives);
+    this.soundManager = soundManager;
     this.engineSound = engineSFX;
     this.hyperspaceSound = hyperspaceSFX;
     this.shotSound = shotSFX;
+    this.saucerSFX =saucerSFX;
+  }
+  createShip(image, startingLives) {
+    let shipStartPos = createVector(width / 2, height / 2);
+    let shipMass = createVector(5, 5);
+    let ship = new Ship(image, 64, shipStartPos, shipMass, startingLives);
     return ship;
   }
 
@@ -32,12 +34,12 @@ class GameController {
     return asteroid;
   }
 
-  createSaucer(saucerSize) {
+  createSaucer(saucerSize, score) {
     let x = -50;
     let y = random(height - saucerSize, height / 3);
     let isSmall = false;
     let rnd = floor(random(1, 5));
-    soundManager.playSound(saucerSFX);
+    this.soundManager.playSound(this.saucerSFX);
     if (rnd == 2) {
       isSmall = true;
     }
@@ -53,7 +55,7 @@ class GameController {
       createVector(0, 0),
       createVector(1, 0),
       150,
-      isSmall
+      isSmall,
     );
     return saucer;
   }
@@ -68,17 +70,20 @@ class GameController {
     if (keyIsDown(38)) {
       //space bar
       ship.fireEngine();
+      this.soundManager.playSound(this.engineSound);
+    }  else{
+      this.engineSound.stop();
     }
 
     if (keyIsDown(70)) {
       //F key
       ship.hyperSpace();
-      soundManager.playSound(hyperspaceSFX);
+      this.soundManager.playSound(this.hyperspaceSound);
     }
 
     if (keyIsDown(32)) {
       ship.shootBullet(1);
-      soundManager.playSound(shotSFX);
+      this.soundManager.playSound(this.shotSound);
     }
   }
 

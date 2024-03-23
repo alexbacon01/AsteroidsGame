@@ -23,7 +23,7 @@ class Ship {
 
   draw() {
     fill(0);
-    this.collider.draw();
+    //this.collider.draw();
     if (this.direction != this.angle) {
       this.direction = lerp(this.direction, this.angle, 0.1);
       this.directionVector = p5.Vector.fromAngle(radians(this.direction));

@@ -1,10 +1,10 @@
-let soundManager;
 
 class GameManager {
   constructor() {
     this.leaderboard = new Array(10);
     this.name;
     this.hud;
+    this.soundManager;
 
     //state of game bools
     this.showLeaders = false;
@@ -45,8 +45,8 @@ class GameManager {
     this.mediumScore = 200;
     this.smallScore = 300;
 
-    this.saucerInterval = 1000;
-    this.numAsteroids = 5 + this.currentLevel * 2;
+    this.saucerInterval = 800;
+    this.numAsteroids =  this.currentLevel * 2;
     this.currentNumAsteroids = this.numAsteroids;
     this.restart = false;
   }
@@ -64,22 +64,19 @@ class GameManager {
     asteroidSFX,
     shotSFX
   ) {
+    this.soundManager = new SoundManager(bgMusic);
+    this.soundManager.backgroundMusic();
+    this.hud = new HUD(font);
+    this.controller = new GameController(this.soundManager,engineSFX,
+      hyperspaceSFX, shotSFX, saucerSFX);
     let asteroid;
-    this.controller = new GameController();
     this.ship = this.controller.createShip(
       shipImage,
-      this.startLives,
-      engineSFX,
-      hyperspaceSFX,
-      shotSFX
-    );
+      this.startLives);
     this.largeAsteroidsImg = asteroidImage;
     this.medAsteroidImg1 = medAsteroidImg1;
     this.medAsteroidImg2 = medAsteroidImg2;
     this.smAsteroidImg = smallAsteroidImg;
-    soundManager = new SoundManager(bgMusic);
-    soundManager.backgroundMusic();
-    this.hud = new HUD(font);
     for (let i = 0; i < this.numAsteroids; i++) {
       asteroid = this.controller.createAsteroid(asteroidImage, 96, 1.1);
       this.largeAsteroids[i] = asteroid;
@@ -87,14 +84,16 @@ class GameManager {
   }
 
   drawGame() {
+    print(this.currentNumAsteroids);
     if (this.gameRunning) {
-      this.controller.checkInputs(this.ship);
+      this.controller.checkInputs(this.ship); //check for player controls
 
-      //ship
+      //ship draw, show the bullets on screen, and wrap around screen
       this.ship.draw();
       this.controller.showBullets(this.ship);
       this.controller.wrap(this.ship);
 
+      //deals with all the saucer issues
       this.handleSaucers();
 
       //asteroids
@@ -111,14 +110,14 @@ class GameManager {
 
   changeScore(change) {
     this.score += change;
-    if (this.score / 5000 >= this.livesGained) {
+    if (this.score / 2000 >= this.livesGained) {
       this.ship.lives += 1;
       this.livesGained += 1;
     }
   }
 
   asteroidBreak(size, pos, velocity) {
-    soundManager.playSound(asteroidSFX);
+    this.soundManager.playSound(asteroidSFX);
     let newA;
     let direction = createVector(random(-1, 1), random(-1, 1));
     if (size == 2) {
@@ -160,8 +159,10 @@ class GameManager {
       isShip = true;
     }
     for (let i = 0; i < size.length; i++) {
-      size[i].draw();
-      size[i].move();
+      if(isShip){
+        size[i].draw();
+        size[i].move();
+      }
       if (this.controller.checkCollisions(size[i], object)) {
         //check for object and asteroid collisions
         if (this.ship.lives > 0 && isShip) {
@@ -228,7 +229,7 @@ class GameManager {
   }
 
   handleSaucers() {
-    if (this.score / this.saucerInterval > this.numSaucers) {
+    if (this.score / this.saucerInterval >= this.numSaucers) {
       this.saucers.push(this.controller.createSaucer(96));
       this.numSaucers += 1;
       print(this.numSaucers);
@@ -237,7 +238,7 @@ class GameManager {
       if (this.saucers[i] != null) {
         this.saucers[i].draw();
         this.saucers[i].move();
-        this.saucers[i].shoot(this.ship.position);
+        this.saucers[i].shoot(this.ship.position, this.score);
         this.controller.showBullets(this.saucers[i]);
         this.controller.wrap(this.saucers[i]);
         this.checkAsteroids(this.largeAsteroids, 1, this.saucers[i]);
@@ -326,6 +327,7 @@ class GameManager {
         this.saucers = [];
         this.restart = true;
         this.shouldSave = true;
+        this.currentNumAsteroids = this.numAsteroids;
       }
 
       if (this.hud.leaderboardButton.clicked()) {
@@ -337,8 +339,10 @@ class GameManager {
       this.name = this.input.value();
       if (this.hud.startButton.clicked() && this.name != "") {
         this.input.position(-1000, -1000);
+        this.soundManager.backgroundMusic();
         this.gameStarted = true;
         this.shouldSave = true;
+        
       }
       if (this.hud.leaderboardButton.clicked()) {
         this.showLeaders = true;
@@ -351,6 +355,8 @@ class GameManager {
       if (this.hud.startButton.clicked()) {
         this.showLeaders = false;
         this.gameStarted = true;
+        this.soundManager.backgroundMusic();
+        this.currentNumAsteroids = this.numAsteroids;
       }
     }
     //end game
@@ -358,6 +364,7 @@ class GameManager {
       this.gameRunning = true;
     } else {
       this.gameRunning = false;
+      this.soundManager.stopMusic();
     }
 
     if (this.currentNumAsteroids == 0) {

@@ -32,7 +32,7 @@ class Saucer {
     fill(255);
     ellipse(0, 0, this.size, this.size);
     pop();
-    this.collider.draw();
+    //this.collider.draw();
     this.bulletTimer = this.coolDownTimer(this.bulletTimer);
   }
 
@@ -44,10 +44,10 @@ class Saucer {
     this.collider.position = this.position;
   }
 
-  shoot(shipPos) {
+  shoot(shipPos, score) {
     let accuracy;
     if (this.isSmall) {
-      accuracy = 1;
+      accuracy = 2 - ((score/5000)/100);
     } else {
       accuracy = 7;
     }
